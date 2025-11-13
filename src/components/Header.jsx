@@ -12,16 +12,30 @@ const Header = () => {
                 className="hidden md:block w-full bg-gray-200 p-2 rounded-md " />
             {/*Search Button (mobile only)*/}
             <button className="md:hidden text-gray-600"
-                    onClick={()=>setShowSearch(true)}>
+                onClick={() => setShowSearch(true)}>
                 🔍
             </button>
             <img src="" alt="Profile" className="rounded-full w-8 h-8" />
             {/* {Overlay search for mobile} */}
-            {showSearch &&(
-                <div>
-                    <input type="text" />
-                    <button></button>
+            {showSearch && (
+                <div className="fixed top-0 left-0 right-0 h-1/4 bg-white z-20 flex items-start pt-4">
+                    {/* Bar pencarian */}
+                    <div className="flex items-center w-full px-4">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            autoFocus
+                            className="flex-1 bg-gray-100 p-2 rounded-md"
+                        />
+                        <button
+                            className="ml-2 text-gray-600 hover:text-gray-800 text-lg"
+                            onClick={() => setShowSearch(false)}
+                        >
+                            ✖
+                        </button>
+                    </div>
                 </div>
+
             )}
         </header>
     )
