@@ -6,7 +6,7 @@ const MainLayout = ({children})=>{
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar/>
-            <div className="flex-1 md:ml-56 flex flex-col">
+            <div className="flex-1  flex flex-col">
                 <Header/>
                 <div className="flex-1 p-4 overflow-y-auto bg-red-300">
                     <Outlet/>

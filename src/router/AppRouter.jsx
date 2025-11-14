@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import ExplorePage from "../pages/ExplorePage";
 import AddPage from "../pages/AddPage";
 import MainLayout from "../layouts/MainLayout";
+import SettingsPage from "../pages/SettingsPage";
 
 function AppRouter() {
   return (
@@ -12,6 +13,7 @@ function AppRouter() {
           <Route path="/" element={<HomePage />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/add" element={<AddPage />} />
+          <Route path="/settings" element={<SettingsPage/>} />
         </Route>
       </Routes>
     </Router>
