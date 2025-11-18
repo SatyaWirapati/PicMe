@@ -10,7 +10,7 @@ const Sidebar = () => {
 
     ];
     return (
-        <aside className="hidden md:flex flex-col ml-2 justify-between border-r w-40 h-screen p-2.5  z-100 top-0 left-0 bg-white">
+        <aside className="hidden md:flex flex-col ml-2 justify-between border-r w-40 h-screen p-2.5 sticky  z-100 top-0 left-0 bg-white">
             <div>
                 <h1 className="font-semibold text-lg  mb-3">PicMe</h1>
                 <nav className="flex flex-col gap-3">
@@ -20,7 +20,7 @@ const Sidebar = () => {
                             to={item.to}
                             className={({isActive})=>(
                                 `flex item-center gap-3 p-2 rounded-md ${
-                                    isActive? "bg-gray-100 font-semibold": "hover:bg-gray-50"
+                                    isActive? "bg-gray-200 font-semibold": "hover:bg-gray-100"
                                 }`
                             )}
                         >
