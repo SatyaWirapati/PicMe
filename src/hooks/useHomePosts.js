@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
-import {fetchExplorePosts} from "../api/postApi"
+import {fetchHomePosts} from "../api/postApi"
 
 
-const useExplorePosts = (size = 9) => {
+
+const useHomePosts = (size = 9) => {
     const [posts, setPosts] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -13,10 +14,10 @@ const useExplorePosts = (size = 9) => {
         if (totalPages && page > totalPages) return;
         setLoading(true);
         try {
-            const data = await fetchExplorePosts(page, size);
+            const data = await fetchHomePosts(page, size);
             const filtered = [];
             for (const p of data.posts){
-                if(p.imageUrl){
+                if(p.imageUrl && p.imageUrl.trim() !== ""){
                     filtered.push(p);
                 }
             }
@@ -34,9 +35,9 @@ const useExplorePosts = (size = 9) => {
         posts,
         loading,
         getPosts,
-        hasMore: totalPages === null || page <= totalPages,
+        hasMore: totalPages === null || page < totalPages,
     }
 
 }
 
-export default useExplorePosts;
+export default useHomePosts;
