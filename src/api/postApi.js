@@ -15,4 +15,9 @@ const fetchHomePosts = async (page =1, size =9)=> {
     return response.data.data;
 }
 
-export {fetchExplorePosts,fetchHomePosts};
+const fetchPostById = async (postId) =>  {
+    const response =  await axiosInstance.get(`/post/${postId}`)
+    return response.data.data;
+}
+
+export {fetchExplorePosts,fetchHomePosts,fetchPostById};
