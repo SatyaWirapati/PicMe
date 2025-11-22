@@ -4,6 +4,7 @@ import ExplorePage from "../pages/ExplorePage";
 import AddPage from "../pages/AddPage";
 import MainLayout from "../layouts/MainLayout";
 import SettingsPage from "../pages/SettingsPage";
+import ProfilePage from "../pages/ProfilePage";
 
 function AppRouter() {
   return (
@@ -14,6 +15,7 @@ function AppRouter() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/add" element={<AddPage />} />
           <Route path="/settings" element={<SettingsPage/>} />
+          <Route path="/profile/:userId" element={<ProfilePage/>} />
         </Route>
       </Routes>
     </Router>
