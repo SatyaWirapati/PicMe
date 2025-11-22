@@ -11,7 +11,10 @@ const PostGrid = ({ posts }) => {
                         className="aspect-square bg-gray-200 rounded-md overflow-hidden
                                     transform transition-all  duration-400
                                     hover:scale-105 hover:shadow-xl hover:z-38 cursor-pointer"
-                        onClick={() => setSelectedPost(fetchPostById(p.id))}>
+                        onClick={async () => {
+                            const data = await fetchPostById(p.id);
+                            setSelectedPost(data);
+                        }}>
                         {p.imageUrl && (
                             <img
                                 src={p.imageUrl}

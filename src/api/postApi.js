@@ -17,6 +17,7 @@ const fetchHomePosts = async (page =1, size =9)=> {
 
 const fetchPostById = async (postId) =>  {
     const response =  await axiosInstance.get(`/post/${postId}`)
+    console.log(response.data.data)
     return response.data.data;
 }
 
