@@ -27,7 +27,7 @@ const PostModal = ({ post, onClose }) => {
 
                 {/* right content */}
                 <div className="bg-red-300 flex flex-col w-full md:h-full h-auto md:w-1/2 rounded-md ">
-                    <div className="flex items-center gap-3 px-3 py-2 border-b-1">
+                    <div className="flex items-center gap-3 px-3 py-2 border-b">
                         <img src={(post.user?.profilePictureUrl && post.user.profilePictureUrl.length > 0)
                             ? post.user.profilePictureUrl
                             : `https://ui-avatars.com/api/?name=${post.user?.username}`
@@ -109,7 +109,7 @@ const PostModal = ({ post, onClose }) => {
                     </div>
 
                     {/* likes and posted date (desktop)*/}
-                    <div className="hidden text-md px-3 border-b py-2 md:flex items-center justify-between gap-3">
+                    <div className="hidden text-md px-3  py-2 md:flex items-center justify-between gap-3">
 
                         {/* perintilan */}
                         <div className="flex items-center gap-3.5">
