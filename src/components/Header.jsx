@@ -3,13 +3,13 @@ const Header = () => {
     const [showSearch, setShowSearch] = useState(false);
 
     return (
-        <header className="h-8 bg-red-300 flex justify-between items-center  border-b sticky top-0 z-10">
+        <header className="h-8 bg-white flex justify-between items-center  border-b sticky top-0 z-10">
             {/* {mobile title} */}
-            <h1 className="font-semibold text-lg md:hidden">PicMe</h1>
+            <h1 className="font-semibold text-lg md:hidden pl-3.5">PicMe</h1>
             {/*Desktop search bar*/}
             <input type="text"
                 placeholder="Search..."
-                className="hidden md:block w-3/4 h-3/4 bg-white p-2 rounded-md ml-4
+                className="hidden md:block w-3/4 h-3/4 bg-gray-200 p-2 rounded-md ml-4
                         focus:outline-none
                         focus:ring-0
                         focus:border-transparent

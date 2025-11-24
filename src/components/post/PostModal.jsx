@@ -1,12 +1,15 @@
 import { X, Heart, Send, MessageCircle } from "lucide-react"
 import { useState } from "react";
 import formatDate from "../../utils/formatDate";
+import { useNavigate } from "react-router-dom";
 
 const PostModal = ({ post, onClose }) => {
     const comments = post?.comments || [];
     const [liked, setLiked] = useState(post.isLiked)
     const [likeCount, setLikeCount] = useState(post.totalLikes)
+
     console.log(post.user)
+
     const toggleLike = () => {
         if (liked) {
             setLikeCount(likeCount - 1);
@@ -15,6 +18,14 @@ const PostModal = ({ post, onClose }) => {
         }
         setLiked(!liked);
     }
+
+    const navigate = useNavigate();
+
+    const goToProfile = () => {
+
+        navigate(`/profile/${post.userId}`)
+    }
+
     return (
         <div className="fixed inset-0 bg-black/70 flex justify-center  items-center z-100">
             <div className=" flex w-full h-full justify-center items-stretch overflow-hidden md:h-[85vh]  md:max-w-5xl md:rounded-lg ">
@@ -26,7 +37,7 @@ const PostModal = ({ post, onClose }) => {
                 </div>
 
                 {/* right content */}
-                <div className="bg-red-300 flex flex-col w-full md:h-full h-auto md:w-1/2 rounded-md ">
+                <div className="bg-red-300 flex flex-col w-full md:h-full h-auto md:w-1/2 rounded-md md:rounded-l-none ">
                     <div className="flex items-center gap-3 px-3 py-2 border-b">
                         <img src={(post.user?.profilePictureUrl && post.user.profilePictureUrl.length > 0)
                             ? post.user.profilePictureUrl
@@ -39,7 +50,12 @@ const PostModal = ({ post, onClose }) => {
                                     "https://ui-avatars.com/api/?name=" + post.user?.username;
                             }}
                         />
-                        <span className="font-semibold">{post.user?.username} </span>
+                        <button
+                            onClick={goToProfile}>
+                            <span className="font-semibold">
+                                {post.user?.username}
+                            </span>
+                        </button>
                     </div>
                     {/* {=== LEFT IMAGE (DESKTOP)} */}
                     <div className="md:hidden w-full relative pt-[100%] bg-blackl">
@@ -63,17 +79,17 @@ const PostModal = ({ post, onClose }) => {
                                         size={28}
                                         className={
                                             liked ? "text-red-500 transition fill-red-500"
-                                                : "text-gray-300 transition"
+                                                : "text-white transition"
                                         } />
                                 </button>
 
                                 <span className=""> {likeCount}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <MessageCircle size={28} className="text-gray-300 transition" />
+                                <MessageCircle size={28} className="text-gray-100 transition" />
                                 <span> {comments.length}</span>
                             </div>
-                            <Send size={28} className="text-gray-300 transition" />
+                            <Send size={28} className="text-gray-100 transition" />
                         </div>
 
                         <span>
@@ -121,17 +137,17 @@ const PostModal = ({ post, onClose }) => {
                                         size={28}
                                         className={
                                             liked ? "text-red-500 transition fill-red-500"
-                                                : "text-gray-300 transition"
+                                                : "text-gray-100 transition"
                                         } />
                                 </button>
 
                                 <span className=""> {likeCount}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <MessageCircle size={28} className="text-gray-300 transition" />
+                                <MessageCircle size={28} className="text-gray-100 transition" />
                                 <span> {comments.length ? comments.length : 0}</span>
                             </div>
-                            <Send size={28} className="text-gray-300 transition" />
+                            <Send size={28} className="text-gray-100 transition" />
                         </div>
 
                         <span>
