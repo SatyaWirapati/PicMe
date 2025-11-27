@@ -28,4 +28,11 @@ const fetchUserById = async (userId) => {
 
 }
 
-export { fetchExplorePosts, fetchHomePosts, fetchPostById, fetchUserById };
+const fetchPostByUserId = async (userId) => {
+    const respones = await axiosInstance.get(`/users-post/${userId}`, {
+        params: { page: 1, size: 10 },
+    })
+    return respones.data.data;
+}
+
+export { fetchExplorePosts, fetchHomePosts, fetchPostById, fetchUserById, fetchPostByUserId };

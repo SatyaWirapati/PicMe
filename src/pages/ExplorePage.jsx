@@ -1,5 +1,4 @@
 import useExplorePosts from "../hooks/useExplorePosts";
-import { useEffect } from "react";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import PostGrid from "../components/post/PostGrid";
 

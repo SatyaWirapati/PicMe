@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { fetchPostById } from "../../api/postApi";
 import PostModal from "./PostModal";
-const PostGrid = ({ posts }) => {
+const PostGrid = ({ posts , className=""}) => {
     const [selectedPost, setSelectedPost] = useState(null);
     return (
         <>
-            <div className="grid grid-cols-3 gap-4">
+            <div className={`grid grid-cols-3 md:gap-4 gap-2 ${className}`}>
                 {posts.map((p) => (
                     <div key={p.id}
                         className="aspect-square bg-gray-200 rounded-md overflow-hidden
