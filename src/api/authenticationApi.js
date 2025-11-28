@@ -1,11 +1,15 @@
+// File: ../api/authenticationApi.js
 import axiosInstance from "../utils/axiosInstance";
 
-const fetchUserById = async () => {
-    const response = await axiosInstance.get(`/login`,
-        { params: {email:}}
-    )
-    console.log(response.data.data)
-    return response.data.data;
+const loginUser = async (email, password) => {
+    // 1. Gunakan metode POST
+    // 2. Kredensial dikirim sebagai objek di body (argumen kedua), bukan params.
+    const response = await axiosInstance.post(`/login`, {
+        email: email,
+        password: password
+    });
 
-}
-export { fetchUserById };
+    return response.data;
+};
+
+export { loginUser };

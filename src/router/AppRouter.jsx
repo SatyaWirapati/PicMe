@@ -15,10 +15,10 @@ function AppRouter() {
           <Route path="/" element={<HomePage />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/add" element={<AddPage />} />
-          <Route path="/settings" element={<SettingsPage/>} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/login" element={<LoginPage/>} />
         </Route>
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );
