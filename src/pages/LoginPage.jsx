@@ -1,7 +1,10 @@
-const LoginPage = () => {
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const LoginPage = () => { 
     return (
-        <div className="p-4">
-            <h1 className="text-xl font-bold text-amber-800">Login Page</h1>
+        <div>
+            login page
         </div>
     )
 }

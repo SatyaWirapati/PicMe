@@ -1,105 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchUserById } from '../api/postApi';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const ProfilePage = () => {
+const LoginPage = () => {
+    const navigate = useNavigate();
 
-    const { userId } = useParams();
-    const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [form, setForm] = useState({ email: "", password: "" });
 
-    useEffect(() => {
-        const loadProfileData = async () => {
-            if (!userId) return;
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
-            setLoading(true);
-            try {
-                const data = await fetchUserById(userId);
-                setUserData(data);
-            } catch (err) {
-                console.error("Gagal memuat data profil: ", err);
-                setUserData(null);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-        loadProfileData();
-    }, [userId]);
+        // TODO: Panggil API login di sini
+        console.log("LOGIN:", form);
+
+        // Jika login berhasil → redirect ke explore
+        navigate("/explore");
+    };
 
     return (
-        <div className="w-full min-h-screen bg-white text-black">
+        <div className="min-h-screen flex flex-col justify-center items-center p-6 bg-gray-50">
+            
+            {/* Logo */}
+            <h1 className="text-3xl font-bold mb-8">PicMe</h1>
 
-            {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b">
-                <span>←</span>
+            {/* Card */}
+            <div className="w-full max-w-sm bg-white shadow-md rounded-lg p-6 border">
 
-                {/* username header */}
-                <span className="font-semibold text-lg">
-                    {userData?.username || ""}
-                </span>
-            </div>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-            {/* profile */}
-            <div className="px-4 py-4">
-
-                {/* top part */}
-                <div className="flex items-center gap-4">
-                    <img
-                        src={userData?.profilePictureUrl}
-                        alt=""
-                        className="w-20 h-20 rounded-full bg-gray-300 object-cover"
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={handleChange}
+                        className="border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-black"
                     />
 
-                    {/* kanan */}
-                    <div className="flex flex-col">
-                        {/* username */}
-                        <span className="font-semibold text-lg">
-                            {userData?.username || ""}
-                        </span>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={form.password}
+                        onChange={handleChange}
+                        className="border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-black"
+                    />
 
-                        <div className="flex items-center gap-4 mt-2 text-sm">
-                            <div className="flex flex-col items-center">
-                                <span>212</span>
-                                <span>posts</span>
-                            </div>
-
-                            <div className="flex flex-col items-center">
-                                <span>123</span>
-                                <span>followers</span>
-                            </div>
-
-                            <div className="flex flex-col items-center">
-                                <span>232</span>
-                                <span>following</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* bio */}
-                <div className="mt-4 text-sm">
-                    {userData?.bio || ""}
-                </div>
-
-                {/* buttons */}
-                <div className="mt-4">
-                    <button className="w-full bg-gray-200 py-2 rounded-lg text-sm font-medium">
-                        Edit Profile
+                    <button
+                        type="submit"
+                        className="bg-black text-white py-2 rounded-md font-semibold hover:bg-gray-900"
+                    >
+                        Log In
                     </button>
-                </div>
+
+                </form>
             </div>
 
-            {/* post grid */}
-            <div className="grid grid-cols-3 gap-1 px-0">
-                {/* nanti isi grid post disini */}
-                <div className="bg-gray-200 aspect-square"></div>
-                <div className="bg-gray-200 aspect-square"></div>
-                <div className="bg-gray-200 aspect-square"></div>
+            <div className="w-full max-w-sm mt-4 bg-white border p-4 text-center rounded-lg">
+                <span className="text-gray-600">Don't have an account?</span>{" "}
+                <Link to="/register" className="text-blue-600 font-semibold">
+                    Sign up
+                </Link>
             </div>
-
         </div>
     );
 };
 
-export default ProfilePage;
+export default LoginPage;
