@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchUserById } from "../api/postApi";
+import { fetchUserById } from "../api/userApi";
 import useUserPosts from "../hooks/useUserPosts";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import PostGrid from "../components/post/PostGrid";
@@ -38,12 +38,13 @@ const ProfilePage = () => {
         <div className="py-3 flex justify-between items-center">
           <img
             src={
-              posts?.profilePictureUrl && posts.profilePictureUrl.length > 0
-                ? posts.profilePictureUrl
-                : `https://ui-avatars.com/api/?name=${posts?.username}`
+              userData?.profilePictureUrl &&
+              userData.profilePictureUrl.length > 0
+                ? userData.profilePictureUrl
+                : `https://ui-avatars.com/api/?name=${userData?.username}`
             }
             alt=""
-            className="w-15 h-15 rounded-full bg-white"
+            className="w-18 h-18 rounded-full bg-white"
           />
 
           {/* kanan */}
@@ -74,8 +75,15 @@ const ProfilePage = () => {
 
         {/* bio */}
         <div>
-          <div className="text-sm w-1/2">{userData?.bio || ""}</div>
-          <div className="text-sm w-1/2 mt-2 mb-2">{userData?.website || ""}</div>
+          <div className="text-md w-1/2">{userData?.bio || ""}</div>
+
+          <div className="text-sm w-1/2 mt-2 mb-2">
+            📞: {userData?.phoneNumber || ""}
+          </div>
+          <div className="text-sm  mt-2 mb-2">📧: {userData?.email || ""}</div>
+          <div className="text-sm w-1/2 mt-2 mb-2">
+            🌐: {userData?.website || ""}
+          </div>
         </div>
 
         {/* buttons */}
@@ -86,7 +94,9 @@ const ProfilePage = () => {
       </div>
 
       {/* post grid */}
-      <PostGrid posts={posts} className="bg-white -m-4 mt-2 p-2" />
+      <div className="bg-white ">
+        <PostGrid posts={posts} className="bg-white -m-4 mt-2 p-2" />
+      </div>
       <div ref={loaderRef} className="h-10"></div>
     </div>
   );
