@@ -7,16 +7,23 @@ import SettingsPage from "../pages/SettingsPage";
 import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/LoginPage";
 
+import ProtectedRoute from "../components/ProtectedRoute";
+
 function AppRouter() {
   return (
     <Router>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
           <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/add" element={<AddPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/profile/:userId" element={<ProfilePage />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/add" element={<AddPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/profile/:userId" element={<ProfilePage />} />
+          </Route>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>
