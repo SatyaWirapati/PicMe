@@ -6,4 +6,10 @@ const fetchUserById = async (userId) => {
     return response.data.data;
 
 }
-export { fetchUserById };
+
+const fetchLoggedUser = async () => {
+    const response = await axiosInstance.get("/user");
+    console.log(response.data.data);
+    return response.data.data;
+}
+export { fetchUserById, fetchLoggedUser };
