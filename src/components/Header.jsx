@@ -1,8 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { fetchLoggedUser } from "../api/userApi";
+
 
 const Header = () => {
+  const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
+
+  const { user, isAuthenticated } = useAuth();
+
+  const goToProfile = async() => { 
+    try {
+      const response = await fetchLoggedUser()
+      navigate(`/profile/${response.id}`)
+    } catch (error) {
+      console.error("Error fetching Logged User:", error);
+    }
+  }
 
   return (
     <header className="h-8 bg-white flex justify-between items-center  border-b sticky top-0 z-10">
@@ -29,8 +45,27 @@ const Header = () => {
         🔍
       </button>
       {/* profile */}
-      <Link to="/login">
-        <img src="" alt="Profile" className="mr-4 rounded-full w-8 h-8" />
+      <Link
+        to={isAuthenticated ? "/profile" : "/login"}
+        className="flex items-center"
+      >
+        {console.log("isAuntheticated: ", isAuthenticated)}
+        {isAuthenticated ? (
+          <img
+            src={
+              user?.profilePictureUrl && user.profilePictureUrl > 0
+                ? user.profilePictureUrl
+                : `https://ui-avatars.com/api/?name=${user.username}`
+            }
+            alt="Profile"
+            onClick={goToProfile}
+            className="mr-4 rounded-full w-7 h-7"
+          />
+        ) : (
+          <button className="mr-4 bg-blue-500 text-white rounded-md py-1 px-3 text-sm">
+            Login
+          </button>
+        )}
       </Link>
 
       {/* {Overlay search for mobile} */}

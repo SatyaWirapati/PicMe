@@ -6,6 +6,7 @@ import MainLayout from "../layouts/MainLayout";
 import SettingsPage from "../pages/SettingsPage";
 import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -26,6 +27,7 @@ function AppRouter() {
           </Route>
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </Router>
   );

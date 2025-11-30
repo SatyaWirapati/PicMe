@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authenticationApi";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError(null);
   };
@@ -20,6 +22,7 @@ const LoginPage = () => {
     try {
       const responese = await loginUser(form.email, form.password);
       console.log("Login Success:", responese);
+      login(responese.user);
       navigate("/explore");
     } catch (err) {
       const errorMessage =
@@ -40,11 +43,17 @@ const LoginPage = () => {
 
       {/* form */}
       <div className="w-full bg-red-300 max-w-md pb-3.5 shadow-md rounded-lg p-6 border">
+        <span className="px-3 text-xl">Login</span>
         <form
           action=""
-          className="flex flex-col gap-4.5 items-center px-3 "
+          className="flex flex-col gap-4.5 items-center px-3 mt-3 "
           onSubmit={handleSubmit}
         >
+          {error && (
+            <div className="w-full text-center text-md font-bold text-red-600 border border-red-400 bg-red-100 p-2 rounded-md mb-2">
+              {error}!
+            </div>
+          )}
           <input
             onChange={handleChange}
             type="text"
