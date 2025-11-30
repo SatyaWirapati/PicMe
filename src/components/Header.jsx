@@ -62,8 +62,8 @@ const Header = () => {
             className="mr-4 rounded-full w-7 h-7"
           />
         ) : (
-          <button className="mr-4 bg-blue-500 text-white rounded-md py-1 px-3 text-sm">
-            Login
+          <button className="mr-4 bg-blue-500 text-white rounded-full py-1 px-1.5 text-sm">
+            👤
           </button>
         )}
       </Link>
