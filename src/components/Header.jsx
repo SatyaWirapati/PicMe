@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { fetchLoggedUser } from "../api/userApi";
+import { fetchUserById } from "../api/userApi";
 
 
 const Header = () => {
@@ -13,8 +14,8 @@ const Header = () => {
 
   const goToProfile = async() => { 
     try {
-      const response = await fetchLoggedUser()
-      navigate(`/profile/${response.id}`)
+      const response = await fetchUserById(user.id)
+      navigate(`/profile/${user.id}`)
     } catch (error) {
       console.error("Error fetching Logged User:", error);
     }

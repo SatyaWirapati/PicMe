@@ -7,7 +7,7 @@ const PostGrid = ({ posts , className=""}) => {
         <>  <div>
             
         </div>
-            <div className={`grid grid-cols-3 md:gap-4 gap-2  ${className}`}>
+            <div className={`grid grid-cols-3 md:gap-8 px-2 gap-2  ${className}`}>
                 {posts.map((p) => (
                     <div key={p.id}
                         className="aspect-square bg-gray-200 rounded-md overflow-hidden

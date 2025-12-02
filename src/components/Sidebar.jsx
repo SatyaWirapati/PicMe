@@ -1,48 +1,17 @@
-import { Home, Compass, PlusSquare, Settings } from "lucide-react";
+import { Home, Compass, PlusSquare, Settings, Circle } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { logoutUser } from "../api/authenticationApi";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate, } from "react-router-dom";
-import {useState} from "react";
-import Notification from "./Notification";
+import SettingsDropdown from "./SettingsDropdown";
 
 const Sidebar = () => {
   const menu = [
     { to: "/", icon: <Home size={22} />, label: "Home" },
     { to: "/explore", icon: <Compass size={22} />, label: "Explore" },
     { to: "/add", icon: <PlusSquare size={22} />, label: "Add" },
-    { to: "/settings", icon: <Settings size={22} />, label: "Settings" },
+    { to: "/stories", icon: <Circle size={22} />, label: "Stories" },
   ];
-
-  const navigate = useNavigate();
-
-  const [notif, setNotif] = useState("");
-
-  const { isAuthenticated, logout } = useAuth();
-
-  const showNotif = (msg) => {
-    setNotif(msg);
-    setTimeout(() => setNotif(""), 2000);
-  };
-
-  const handleLogin = () => {
-    navigate("/login");
-  };
-
-  const handleLogout = async () => {
-    try {
-      const response = await logoutUser();
-      console.log(response.message);
-      showNotif(response.message);
-      logout();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   return (
     <>
-      <Notification message={notif} />
       <aside
         className="
                 // mobile
@@ -63,51 +32,46 @@ const Sidebar = () => {
 
         <nav
           className="
-            // mobile
-            flex gap-6 items-center justify-evenly w-full
-            
-            // desktop
-            md:flex-col md:gap-3 md:mt-[25.2px]"
+          flex gap-6 items-center justify-evenly w-full
+          
+          md:flex-col md:gap-3 md:mt-[25.2px]  
+          md:justify-between md:flex-1
+          md:items-center
+        "
         >
-          {menu.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `
-                                flex items-center gap-2
-                                p-1 md:p-2 rounded-md 
-                                transition md:w-10/12
+          {/* WRAPPER untuk menu */}
+          <div className=" space-y-1">
+            {menu.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `
+            flex items-center gap-2
+            p-1 md:p-2 rounded-md 
+            transition
+            w-[140px]   // << ini kunci penting!!!!
+            ${
+              isActive
+                ? "font-semibold text-black md:bg-gray-200"
+                : "text-gray-600 md:hover:bg-gray-100"
+            }
+            md:gap-3
+          `
+                }
+              >
+                <span className="w-[22px] flex justify-center">
+                  {item.icon}
+                </span>
 
-                                ${
-                                  isActive
-                                    ? "font-semibold text-black"
-                                    : "text-gray-600"
-                                }
-                                ${
-                                  isActive
-                                    ? "md:bg-gray-200"
-                                    : "md:hover:bg-gray-100"
-                                }
+                <span className="hidden md:inline">{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
 
-                                /* mobile: icon-only */
-                                md:gap-3
-                            `
-              }
-            >
-              {item.icon}
-
-              {/* Hide text on mobile, show on desktop */}
-              <span className="hidden md:inline">{item.label}</span>
-            </NavLink>
-          ))}
+          {/* Settings */}
+          <SettingsDropdown />
         </nav>
-        <div
-                  className={`hidden md:block mt-auto ${isAuthenticated? " bg-red-500": "bg-blue-500"} px-3 py-1 rounded-md`}
-          onClick={isAuthenticated ? handleLogout : handleLogin}
-        >
-                  <button className="text-white">{isAuthenticated? "Logout":"Login"}</button>
-        </div>
       </aside>
     </>
   );

@@ -3,10 +3,10 @@ import HomePage from "../pages/HomePage";
 import ExplorePage from "../pages/ExplorePage";
 import AddPage from "../pages/AddPage";
 import MainLayout from "../layouts/MainLayout";
-import SettingsPage from "../pages/SettingsPage";
 import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import StoriesPage from "../pages/StoriesPage";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -22,7 +22,7 @@ function AppRouter() {
             <Route path="/" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
             <Route path="/add" element={<AddPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/stories" element={<StoriesPage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
           </Route>
         </Route>

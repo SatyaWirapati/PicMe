@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import { Settings, LogIn, LogOut, Edit, Sun, Moon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logoutUser } from "../api/authenticationApi";
+import { Settings, LogOut, LogIn, Edit, Sun, Moon } from "lucide-react";
 
 const SettingsDropdown = ({ direction = "up" }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-
   const navigate = useNavigate();
   const location = useLocation();
+
   const { isAuthenticated, logout } = useAuth();
 
-  const toggleDropdown = () => {
+  const toggleDropwdown = () => {
     setOpen((prev) => !prev);
   };
 
@@ -38,74 +38,62 @@ const SettingsDropdown = ({ direction = "up" }) => {
   };
 
   const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
+    document.documentElement.classList.toggle("light");
   };
 
-  /* =====================
-      CLOSE WHEN CLICK OUTSIDE
-  ====================== */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
       }
     };
+      document.addEventListener("mousedown", handleClickOutside);
+      console.log("SettingsDropdown rendered");
 
-    document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  /* ===================== 
-      CLOSE ON ROUTE CHANGE
-  ====================== */
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      {/* SETTINGS BUTTON */}
+    <div className="relative w-full" ref={dropdownRef}>
+      {/* settings button */}
       <button
-        onClick={toggleDropdown}
-        className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition"
+        onClick={toggleDropwdown}
+        className="flex gap-2 p-2 hover:bg-gray-100 rounded-md w-full items-center transition "
       >
         <Settings size={22} />
         <span className="hidden md:inline">Settings</span>
       </button>
 
-      {/* DROPDOWN */}
+      {/* dropdown */}
       {open && (
         <div
-          className={`
-            absolute right-0 w-52 bg-white dark:bg-zinc-900 
-            border rounded-xl shadow-lg p-2 z-50 space-y-1
-
-            ${
-              direction === "up"
-                ? "bottom-12 origin-bottom animate-slide-up"
-                : "top-12 origin-top animate-slide-down"
-            }
-          `}
+          className={`absolute w-full right-0 bg-gray-300  z-50 border rounded-xl shadow-lg p-2 space-y-1
+                                ${
+                                  direction === "up"
+                                    ? "bottom-12 origin-bottom animate-slide-up"
+                                    : "top-12 origin-top animate-slide-down"
+                                }`}
         >
-          {/* Edit Profile */}
+          {/* profile edit */}
           {isAuthenticated && (
-            <button
-              onClick={handleEditProfile}
-              className="dropdown-item"
-            >
-              <Edit size={16} />
+            <button className=" dropdown-item">
+              <Edit size={22} />
               <span>Edit Profile</span>
             </button>
           )}
 
-          {/* Theme toggle */}
-          <button onClick={toggleTheme} className="dropdown-item">
-            <Sun size={16} className="block dark:hidden" />
-            <Moon size={16} className="hidden dark:block" />
+          {/* theme */}
+          <button className="dropdown-item" onClick={toggleTheme}>
+            <Sun size={22} className="block dark:hidden" />
+            <Moon size={22} className="hidden dark:block" />
             <span>Dark / Light</span>
           </button>
 
-          <hr className="my-1 border-gray-200 dark:border-zinc-700" />
+          <hr className="my-1 border-gray-200 dark:border-zinc-700 " />
 
           {/* LOGIN / LOGOUT */}
           {isAuthenticated ? (
@@ -113,12 +101,12 @@ const SettingsDropdown = ({ direction = "up" }) => {
               onClick={handleLogout}
               className="dropdown-item text-red-500"
             >
-              <LogOut size={16} />
+              <LogOut size={22} />
               <span>Logout</span>
             </button>
           ) : (
             <button onClick={handleLogin} className="dropdown-item">
-              <LogIn size={16} />
+              <LogIn size={22} />
               <span>Login</span>
             </button>
           )}

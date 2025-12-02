@@ -20,9 +20,9 @@ const ProfilePage = () => {
   }, [userId]);
 
   return (
-    <div className="w-full min-h-screen bg-red-300 text-black">
+    <div className="w-full min-h-screen bg-red-300 text-black ">
       {/* ISI USER */}
-      <div className="max-w-2xl mx-auto md:bg-white md:-mb-2.5 md:pb-2.5">
+      <div className="max-w-2xl mx-auto md:bg-white md:-mb-2.5 md:pb-2.5 rounded-md md:px-8">
         {/* Header */}
         <div className="flex items-center p-1.5 relative border-b">
           {/* arrow */}
