@@ -71,7 +71,7 @@ const SettingsDropdown = ({ direction = "up" }) => {
       {/* dropdown */}
       {open && (
         <div
-          className={`absolute w-full right-0 bg-gray-300  z-50 border rounded-xl shadow-lg p-2 space-y-1
+          className={`absolute min-w-[120px] md:w-full right-0 bg-gray-300  z-50 border rounded-xl shadow-lg p-2 space-y-1
                                 ${
                                   direction === "up"
                                     ? "bottom-12 origin-bottom animate-slide-up"

@@ -40,7 +40,7 @@ const Sidebar = () => {
         "
         >
           {/* WRAPPER untuk menu */}
-          <div className=" space-y-1">
+          <div className=" md:space-y-1 flex flex-row md:flex-col gap-12 md:gap-3">
             {menu.map((item) => (
               <NavLink
                 key={item.to}
@@ -49,8 +49,8 @@ const Sidebar = () => {
                   `
             flex items-center gap-2
             p-1 md:p-2 rounded-md 
-            transition
-            w-[140px]   // << ini kunci penting!!!!
+            transition w-auto
+            md:w-[140px] 
             ${
               isActive
                 ? "font-semibold text-black md:bg-gray-200"
@@ -70,7 +70,9 @@ const Sidebar = () => {
           </div>
 
           {/* Settings */}
-          <SettingsDropdown />
+          <div className="hidden md:flex">
+            <SettingsDropdown direction="up" />
+          </div>
         </nav>
       </aside>
     </>
