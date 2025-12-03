@@ -12,4 +12,10 @@ const fetchLoggedUser = async () => {
     console.log(response.data.data);
     return response.data.data;
 }
-export { fetchUserById, fetchLoggedUser };
+
+const postUpdateProfile = async (formData) => {
+    const response = await axiosInstance.post("/update-profile",formData);
+    console.log(response.data);
+    return response.data;
+}
+export { fetchUserById, fetchLoggedUser, postUpdateProfile};

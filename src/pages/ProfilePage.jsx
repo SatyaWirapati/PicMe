@@ -4,12 +4,14 @@ import { fetchUserById } from "../api/userApi";
 import useUserPosts from "../hooks/useUserPosts";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import PostGrid from "../components/post/PostGrid";
+import { useAuth } from "../context/AuthContext";
 
 const ProfilePage = () => {
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
   const { posts, loading, getPosts, hasMore } = useUserPosts(userId, 9);
   const loaderRef = useInfiniteScroll(getPosts, loading, hasMore);
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadProfileData = async () => {
@@ -30,7 +32,7 @@ const ProfilePage = () => {
 
           {/* username header */}
           <span className="mx-auto font-semibold text-base">
-            {userData?.username || ""}
+            {user?.username || ""}
           </span>
         </div>
 
@@ -40,10 +42,10 @@ const ProfilePage = () => {
           <div className="py-3 flex justify-between items-center">
             <img
               src={
-                userData?.profilePictureUrl &&
-                userData.profilePictureUrl.length > 0
-                  ? userData.profilePictureUrl
-                  : `https://ui-avatars.com/api/?name=${userData?.username}`
+                user?.profilePictureUrl &&
+                user.profilePictureUrl.length > 0
+                  ? user.profilePictureUrl
+                  : `https://ui-avatars.com/api/?name=${user?.username}`
               }
               alt=""
               className="w-18 h-18 rounded-full bg-white"
@@ -53,7 +55,7 @@ const ProfilePage = () => {
             <div className="flex flex-col mx-auto items-center justify-between">
               {/* username */}
               <span className="mx-auto my-2 font-semibold text-base">
-                {userData?.username || ""}
+                {user?.username || ""}
               </span>
 
               <div className="flex gap-4 ">
@@ -77,21 +79,21 @@ const ProfilePage = () => {
 
           {/* bio */}
           <div>
-            <div className="text-md w-1/2">{userData?.bio || ""}</div>
+            <div className="text-md w-1/2">{user?.bio || ""}</div>
 
             {userData?.phoneNumber && (
               <div className="text-sm w-1/2 mt-2 mb-2">
-                📞: {userData.phoneNumber}
+                📞: {user.phoneNumber}
               </div>
             )}
 
             {userData?.email && (
-              <div className="text-sm mt-2 mb-2">📧: {userData.email}</div>
+              <div className="text-sm mt-2 mb-2">📧: {user.email}</div>
             )}
 
             {userData?.website && (
               <div className="text-sm w-1/2 mt-2 mb-2">
-                🌐: {userData.website}
+                🌐: {user.website}
               </div>
             )}
           </div>

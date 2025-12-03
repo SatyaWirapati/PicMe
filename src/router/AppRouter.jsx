@@ -7,6 +7,7 @@ import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import StoriesPage from "../pages/StoriesPage";
+import EditProfilePage from "../pages/EditProfilePage";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -24,6 +25,7 @@ function AppRouter() {
             <Route path="/add" element={<AddPage />} />
             <Route path="/stories" element={<StoriesPage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/editProfile" element={<EditProfilePage/>}/>
           </Route>
         </Route>
         <Route path="/login" element={<LoginPage />} />

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { registerUser } from "../api/authenticationApi";
+import { postUpdateProfile } from "../api/userApi";
 
-const RegisterPage = () => {
+const EditProfilePage = () => {
   const navigate = useNavigate();
-  const { login, user} = useAuth();
+  const { login, user } = useAuth();
 
   const [step, setStep] = useState(1); // <-- STEP 1 or STEP 2
 
@@ -13,8 +13,6 @@ const RegisterPage = () => {
     username: "",
     email: "",
     name: "",
-    password: "",
-    passwordRepeat: "",
     profilePictureUrl: "",
     phoneNumber: "",
     bio: "",
@@ -29,13 +27,6 @@ const RegisterPage = () => {
       name: "phoneNumber",
       label: "Phone Number",
       type: "text",
-      required: true,
-    },
-    { name: "password", label: "Password (must include letter and number", type: "password", required: true },
-    {
-      name: "passwordRepeat",
-      label: "Repeat Password",
-      type: "password",
       required: true,
     },
   ];
@@ -68,9 +59,6 @@ const RegisterPage = () => {
     if (!isStep1Valid) {
       return setError("Isi semua field terlebih dahulu.");
     }
-    if (formData.password !== formData.passwordRepeat) {
-      return setError("Password dan konfirmasi password tidak sesuai.");
-    }
     setStep(2);
   };
 
@@ -79,18 +67,34 @@ const RegisterPage = () => {
 
     try {
       setIsLoading(true);
-      console.log(formData);  
-      const response = await registerUser(formData);
-      
-      navigate("/login");
+      console.log("ini formData",formData);
+        const response = await postUpdateProfile(formData);
+        login({ ...user, ...formData });
+      navigate("/explore");
     } catch (err) {
       const message =
-        err.response?.data?.message || "Register gagal. Periksa data Anda.";
+        err.response?.data?.message || "Update gagal. Periksa data Anda.";
       setError(message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        username: user.username || "",
+        email: user.email || "",
+        name: user.name || "",
+        profilePictureUrl: user.profilePictureUrl || "",
+        phoneNumber: user.phoneNumber || "",
+        bio: user.bio || "",
+        website: user.website || "",
+      });
+    }
+  }, [user]);
+
+  if (!user) return <p>Loading...</p>;
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 p-3 pb-40">
@@ -100,7 +104,7 @@ const RegisterPage = () => {
 
       <div className="w-full max-w-lg  pb-3.5 shadow-md rounded-lg p-6 border bg-red-300">
         <span className="px-3 text-xl">
-          {step === 1 ? "Sign Up — Step 1" : "Sign Up — Step 2"}
+          {step === 1 ? "Update Profile — Step 1" : "Update Profile — Step 2"}
         </span>
 
         <form className="flex flex-col gap-4     mt-3" onSubmit={handleSubmit}>
@@ -111,17 +115,18 @@ const RegisterPage = () => {
           )}
 
           {/* STEP 1 */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-end">
             {step === 1 &&
               step1Fields.map((field) => (
-                <div key={field.name} className="w-full">
+                <div key={field.name} className="w-full ">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {field.label}
                   </label>
+
                   <input
                     name={field.name}
                     type={field.type}
-                    value={formData[field.name]}
+                    value={formData[field.name] ?? ""}
                     onChange={handleChange}
                     required={field.required}
                     className="border w-full bg-white rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
@@ -140,7 +145,7 @@ const RegisterPage = () => {
                 <input
                   name={field.name}
                   type={field.type}
-                  value={formData[field.name]}
+                  value={formData[field.name] ?? ""}
                   onChange={handleChange}
                   className="border w-full bg-white rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
                 />
@@ -175,23 +180,13 @@ const RegisterPage = () => {
               }`}
               disabled={isLoading}
             >
-              {isLoading ? "Signing up..." : "Sign Up"}
+              {isLoading ? "Submiting..." : "Submit"}
             </button>
           )}
         </form>
-
-        <div className="mx-auto flex justify-center mt-4 text-lg">
-          <span className="mr-2">Already have an account?</span>
-          <Link
-            to="/login"
-            className="text-blue-500 hover:text-blue-700 hover:underline"
-          >
-            Login
-          </Link>
-        </div>
       </div>
     </div>
   );
 };
 
-export default RegisterPage;
+export default EditProfilePage;

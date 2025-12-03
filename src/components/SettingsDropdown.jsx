@@ -33,7 +33,7 @@ const SettingsDropdown = ({ direction = "up" }) => {
   };
 
   const handleEditProfile = () => {
-    navigate("/profile/me");
+    navigate("/editProfile");
     setOpen(false);
   };
 
@@ -71,7 +71,7 @@ const SettingsDropdown = ({ direction = "up" }) => {
       {/* dropdown */}
       {open && (
         <div
-          className={`absolute min-w-[120px] md:w-full right-0 bg-gray-300  z-50 border rounded-xl shadow-lg p-2 space-y-1
+          className={`absolute left-1/2 -translate-x-1/2 min-w-[120px] md:w-full  bg-gray-300  z-50 border rounded-xl shadow-lg p-2 space-y-1
                                 ${
                                   direction === "up"
                                     ? "bottom-12 origin-bottom animate-slide-up"
@@ -80,7 +80,8 @@ const SettingsDropdown = ({ direction = "up" }) => {
         >
           {/* profile edit */}
           {isAuthenticated && (
-            <button className=" dropdown-item">
+            <button className=" dropdown-item"
+                    onClick={handleEditProfile}>
               <Edit size={22} />
               <span>Edit Profile</span>
             </button>
