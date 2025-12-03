@@ -8,6 +8,7 @@ const fetchExplorePosts = async (page = 1, size = 9) => {
 
     return response.data.data;
 }
+
 const fetchHomePosts = async (page = 1, size = 9) => {
     const response = await axiosInstance.get("/following-post", {
         params: { page, size },
@@ -21,7 +22,11 @@ const fetchPostById = async (postId) => {
     return response.data.data;
 }
 
-
+const createPost = async (form) => {
+    const response = await axiosInstance.post("/create-post", form);
+    console.log(response.data);
+    return response.data;
+}
 
 const fetchPostByUserId = async (userId) => {
     const respones = await axiosInstance.get(`/users-post/${userId}`, {
@@ -30,4 +35,4 @@ const fetchPostByUserId = async (userId) => {
     return respones.data.data;
 }
 
-export { fetchExplorePosts, fetchHomePosts, fetchPostById,  fetchPostByUserId };
+export { fetchExplorePosts, fetchHomePosts, fetchPostById,  fetchPostByUserId, createPost };
