@@ -112,7 +112,7 @@ const ProfilePage = () => {
 
       {/* post grid */}
       <div className="bg-white border-t-0 ">
-        <PostGrid posts={posts} className="bg-white -m-4 mt-2 p-2" />
+        <PostGrid posts={posts} className="bg-white -m-4 mt-2 p-2 md:p-6" />
       </div>
       <div ref={loaderRef} className="h-10"></div>
     </div>

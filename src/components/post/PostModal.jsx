@@ -1,15 +1,25 @@
-import { X, Heart, Send, MessageCircle } from "lucide-react";
+import {
+  X,
+  Heart,
+  Send,
+  MessageCircle,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import formatDate from "../../utils/formatDate";
 import { useNavigate } from "react-router-dom";
 import { likePost, unlikePost } from "../../api/likeApi";
 import Notification from "../Notification";
+import { useEffect, useRef } from "react";
 
 const PostModal = ({ post, onClose }) => {
   const comments = post?.comments || [];
   const [liked, setLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.totalLikes);
   const [notif, setNotif] = useState("");
+  const [openMenu, setOpenMenu] = useState(false);
 
   console.log(post.user);
 
@@ -33,11 +43,26 @@ const PostModal = ({ post, onClose }) => {
     setLiked(!liked);
   };
 
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const navigate = useNavigate();
 
   const goToProfile = () => {
     navigate(`/profile/${post.userId}`);
   };
+
+  handle
 
   return (
     <>
@@ -58,24 +83,61 @@ const PostModal = ({ post, onClose }) => {
 
           {/* right content */}
           <div className="bg-red-300 flex flex-col w-full md:h-full h-auto md:w-1/2 rounded-md md:rounded-l-none ">
-            <div className="flex items-center gap-3 px-3 py-2 border-b bg-white">
-              <img
-                src={
-                  post.user?.profilePictureUrl &&
-                  post.user.profilePictureUrl.length > 0
-                    ? post.user.profilePictureUrl
-                    : `https://ui-avatars.com/api/?name=${post.user?.username}`
-                }
-                alt="pic"
-                className="w-10 h-10 rounded-full bg-blue-500"
-                onError={(e) => {
-                  e.target.src =
-                    "https://ui-avatars.com/api/?name=" + post.user?.username;
-                }}
-              />
-              <button onClick={goToProfile}>
-                <span className="font-semibold">{post.user?.username}</span>
-              </button>
+            <div className="flex items-center justify-between gap-3 px-3 py-2 border-b bg-white">
+              <div className="flex gap-3 items-center">
+                <img
+                  src={
+                    post.user?.profilePictureUrl &&
+                    post.user.profilePictureUrl.length > 0
+                      ? post.user.profilePictureUrl
+                      : `https://ui-avatars.com/api/?name=${post.user?.username}`
+                  }
+                  alt="pic"
+                  className="w-10 h-10 rounded-full bg-blue-500"
+                  onError={(e) => {
+                    e.target.src =
+                      "https://ui-avatars.com/api/?name=" + post.user?.username;
+                  }}
+                />
+                <button onClick={goToProfile}>
+                  <span className="font-semibold">{post.user?.username}</span>
+                </button>
+              </div>
+
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setOpenMenu(!openMenu)}
+                  className="p-2 rounded-full hover:bg-gray-100"
+                >
+                  <MoreHorizontal />
+                </button>
+
+                {openMenu && (
+                  <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-40 z-50 animate-slide-down border">
+                    <button
+                      className="dropdown-item text-blue-600"
+                      onClick={() => {
+                        setOpenMenu(false);
+                        showNotif("Update clicked");
+                      }}
+                    >
+                      <Edit size={24} />
+                      Update
+                    </button>
+
+                    <button
+                      className="dropdown-item text-red-600"
+                      onClick={() => {
+                        setOpenMenu(false);
+                        showNotif("Delete clicked");
+                      }}
+                    >
+                      <Trash2 size={24} />
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             {/* {image mobile} */}
             <div className="md:hidden w-full  relative pt-[100%] bg-black">

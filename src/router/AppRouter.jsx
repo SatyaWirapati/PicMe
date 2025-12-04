@@ -8,6 +8,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import StoriesPage from "../pages/StoriesPage";
 import EditProfilePage from "../pages/EditProfilePage";
+import FakeLoginPage from "../pages/FakeLoginPage";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 

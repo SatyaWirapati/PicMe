@@ -34,10 +34,17 @@ const fetchPostByUserId = async (userId) => {
   return respones.data.data;
 };
 
+const postUpdate = async (postId) => {
+  const respones = await axiosInstance.post(`/update-post/${postId}`)
+  console.log(respones);
+  return respones.data;
+}
+
 export {
   fetchExplorePosts,
   fetchHomePosts,
   fetchPostById,
   fetchPostByUserId,
   createPost,
+  postUpdate
 };
