@@ -1,131 +1,24 @@
-import { useState, useRef, useEffect } from "react";
-import { Settings, LogIn, LogOut, Edit, Sun, Moon } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { logoutUser } from "../api/authenticationApi";
+import { createContext, useContext, useState } from "react";
+import Notification from "./Notification";
 
-const SettingsDropdown = ({ direction = "up" }) => {
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef(null);
+const NotificationContext = createContext();
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { isAuthenticated, logout } = useAuth();
+export const useNotification = () => useContext(NotificationContext);
 
-  const toggleDropdown = () => {
-    setOpen((prev) => !prev);
+export const NotificationProvider = ({ children }) => {
+  const [message, setMessage] = useState("");
+ 
+  const showNotification = (msg, duration = 3000) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(""), duration);
   };
-
-  const handleLogin = () => {
-    navigate("/login");
-    setOpen(false);
-  };
-
-  const handleLogout = async () => {
-    try {
-      const res = await logoutUser();
-      console.log(res?.message);
-      logout();
-      setOpen(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleEditProfile = () => {
-    navigate("/profile/me");
-    setOpen(false);
-  };
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-  };
-
-  /* =====================
-      CLOSE WHEN CLICK OUTSIDE
-  ====================== */
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  /* ===================== 
-      CLOSE ON ROUTE CHANGE
-  ====================== */
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      {/* SETTINGS BUTTON */}
-      <button
-        onClick={toggleDropdown}
-        className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition"
-      >
-        <Settings size={22} />
-        <span className="hidden md:inline">Settings</span>
-      </button>
+    <NotificationContext.Provider value={{ showNotification }}>
+      {children}
 
-      {/* DROPDOWN */}
-      {open && (
-        <div
-          className={`
-            absolute right-0 w-52 bg-white dark:bg-zinc-900 
-            border rounded-xl shadow-lg p-2 z-50 space-y-1
-
-            ${
-              direction === "up"
-                ? "bottom-12 origin-bottom animate-slide-up"
-                : "top-12 origin-top animate-slide-down"
-            }
-          `}
-        >
-          {/* Edit Profile */}
-          {isAuthenticated && (
-            <button
-              onClick={handleEditProfile}
-              className="dropdown-item"
-            >
-              <Edit size={16} />
-              <span>Edit Profile</span>
-            </button>
-          )}
-
-          {/* Theme toggle */}
-          <button onClick={toggleTheme} className="dropdown-item">
-            <Sun size={16} className="block dark:hidden" />
-            <Moon size={16} className="hidden dark:block" />
-            <span>Dark / Light</span>
-          </button>
-
-          <hr className="my-1 border-gray-200 dark:border-zinc-700" />
-
-          {/* LOGIN / LOGOUT */}
-          {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="dropdown-item text-red-500"
-            >
-              <LogOut size={16} />
-              <span>Logout</span>
-            </button>
-          ) : (
-            <button onClick={handleLogin} className="dropdown-item">
-              <LogIn size={16} />
-              <span>Login</span>
-            </button>
-          )}
-        </div>
-      )}
-    </div>
+      {/* tampil di semua halaman */}
+      <Notification message={message} />
+    </NotificationContext.Provider>
   );
 };
-
-export default SettingsDropdown;

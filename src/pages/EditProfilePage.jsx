@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { postUpdateProfile } from "../api/userApi";
+import { useNotification } from "../context/NotificationContext";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
   const { login, user } = useAuth();
-
+  const { showNotification } = useNotification();
   const [step, setStep] = useState(1); // <-- STEP 1 or STEP 2
 
   const [formData, setFormData] = useState({
@@ -68,7 +69,9 @@ const EditProfilePage = () => {
     try {
       setIsLoading(true);
       console.log("ini formData",formData);
-        const response = await postUpdateProfile(formData);
+      const response = await postUpdateProfile(formData);
+      showNotification(response.message);
+      
         login({ ...user, ...formData });
       navigate("/explore");
     } catch (err) {

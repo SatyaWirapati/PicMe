@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logoutUser } from "../api/authenticationApi";
 import { Settings, LogOut, LogIn, Edit, Sun, Moon } from "lucide-react";
+import { useNotification } from "../context/NotificationContext";
 
 const SettingsDropdown = ({ direction = "up" }) => {
   const [open, setOpen] = useState(false);
@@ -11,6 +12,7 @@ const SettingsDropdown = ({ direction = "up" }) => {
   const location = useLocation();
 
   const { isAuthenticated, logout } = useAuth();
+  const { showNotification } = useNotification();
 
   const toggleDropwdown = () => {
     setOpen((prev) => !prev);
@@ -25,6 +27,7 @@ const SettingsDropdown = ({ direction = "up" }) => {
     try {
       const res = await logoutUser();
       console.log(res?.message);
+      showNotification(res?.message);
       logout();
       setOpen(false);
     } catch (err) {

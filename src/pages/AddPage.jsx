@@ -1,22 +1,25 @@
 import { useState } from "react";
+import { createPost } from "../api/postApi";
 
 const AddPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-  const [caption, setCaption] = useState("");
+  const [formData, setFormData] = useState({
+    imageUrl: "",
+    caption: "" 
+  })
   const [error, setError] = useState(null);
 
   const isValidImageUrl = (url) => {
     return url.match(/\.(jpeg|jpg|gif|png|webp)$/) != null;
   };
 
-  const handleUrlChange = (e) => {
-    setImageUrl(e.target.value);
-  };
-  const handleCaptionChange = (e) => {
-    setCaption(e.target.value);
-  };
-  const handleSubmit = () => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,[e.target.name]:e.target.value
+    })
+    setError(null)
+  }
+  const handleSubmit = async() => {
       if (!imageUrl) {
         return setError("Image Url tidak boleh kosong")
       }
@@ -26,14 +29,36 @@ const AddPage = () => {
       }
 
       try {
-          
-      }
+        const response = await createPost()
+        
+      } catch (err) {
+        setError("Upload Image");
+      } 
   };
 
   return (
     <div className="flex flex-col items-center">
       <h2>Upload your post...!</h2>
-      <div></div>
+      <form action="">
+
+        {/* imageUrl */}
+        <div>
+          <label htmlFor=""></label>
+          <input type="text" />
+        </div>
+
+          {/* preview */}
+        <div>
+          <p></p>
+          <img src="" alt="" />
+        </div>
+
+        {/* caption */}
+        <div>
+          <label htmlFor=""></label>
+          <input type="text" />
+        </div>
+      </form>
     </div>
   );
 };
