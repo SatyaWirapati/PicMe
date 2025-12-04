@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authenticationApi";
 import { useAuth } from "../context/AuthContext";
+import { useNotification } from "../context/NotificationContext"; 
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const LoginPage = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const { showNotification } = useNotification();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,6 +25,7 @@ const LoginPage = () => {
       const responese = await loginUser(form.email, form.password);
       console.log("Login Success:", responese);
       login(responese.user);
+      showNotification("Login In")
       navigate("/explore");
     } catch (err) {
       const errorMessage =
