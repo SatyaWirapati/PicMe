@@ -34,8 +34,8 @@ const fetchPostByUserId = async (userId) => {
   return respones.data.data;
 };
 
-const postUpdate = async (postId) => {
-  const respones = await axiosInstance.post(`/update-post/${postId}`)
+const postUpdate = async (postId, updatedPost) => {
+  const respones = await axiosInstance.post(`/update-post/${postId}`,updatedPost)
   console.log(respones);
   return respones.data;
 }
