@@ -40,11 +40,18 @@ const postUpdate = async (postId, updatedPost) => {
   return respones.data;
 }
 
+const deletePost = async (postId) => {
+  const respones = await axiosInstance.delete(`/delete-post${postId}`);
+  console.log(respones)
+  return respones.data;
+}
+
 export {
   fetchExplorePosts,
   fetchHomePosts,
   fetchPostById,
   fetchPostByUserId,
   createPost,
-  postUpdate
+  postUpdate,
+  deletePost
 };

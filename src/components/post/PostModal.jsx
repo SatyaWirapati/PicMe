@@ -12,12 +12,12 @@ import formatDate from "../../utils/formatDate";
 import { useNavigate } from "react-router-dom";
 import { likePost, unlikePost } from "../../api/likeApi";
 import { useEffect, useRef } from "react";
-import { postUpdate } from "../../api/postApi";
+import { postUpdate, deletePost } from "../../api/postApi";
 import { useNotification } from "../../context/NotificationContext";
 
 const PostModal = ({ post, onClose }) => {
   const comments = post?.comments || [];
-  const [liked, setLiked] = useState(post.isLiked);
+  const [liked, setLiked] = useState(post.isLike);
   const [likeCount, setLikeCount] = useState(post.totalLikes);
   const [openMenu, setOpenMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -25,7 +25,7 @@ const PostModal = ({ post, onClose }) => {
   const [fillEdited, setFillEdited] = useState(post.caption);
   const { showNotification } = useNotification();
 
-  console.log(post.user);
+  console.log("28",post);
 
   const showNotif = (msg) => {
     showNotification(msg);
@@ -82,7 +82,17 @@ const PostModal = ({ post, onClose }) => {
       });
       showNotification(response.message);
     } catch (err) {
-      showNotif("Failed to update caption ❌");
+      showNotification("Failed to update caption ❌");
+    }
+  };
+
+  const handleDeletePost = async () => {
+    setOpenMenu(false);
+    try {
+      const response = await deletePost(post.id);
+      showNotification(response.message);
+    } catch (err) {
+      showNotification("error");
     }
   };
 
@@ -149,10 +159,7 @@ const PostModal = ({ post, onClose }) => {
 
                   <button
                     className="dropdown-item text-red-600"
-                    onClick={() => {
-                      setOpenMenu(false);
-                      showNotif("Delete clicked");
-                    }}
+                    onClick={handleDeletePost}
                   >
                     <Trash2 size={24} />
                     Delete
