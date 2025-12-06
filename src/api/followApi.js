@@ -11,4 +11,7 @@ const getFollowersById = async (userId, page = 1, size = 10) => {
     const response = await axiosInstance.get(`/followers/${userId}`, {
         params: { page, size },
     })
+    return response.data;
 }
+
+export {getFollowersById, getFollowingById}

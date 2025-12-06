@@ -1,120 +1,270 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import { fetchUserById } from "../api/userApi";
+import { getFollowersById, getFollowingById } from "../api/followApi";
+
 import useUserPosts from "../hooks/useUserPosts";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
+
 import PostGrid from "../components/post/PostGrid";
+import FollowModal from "../components/FollowModal";
 import { useAuth } from "../context/AuthContext";
 
 const ProfilePage = () => {
   const { userId } = useParams();
+  const { user: currentUser } = useAuth();
+
   const [userData, setUserData] = useState(null);
+
   const { posts, loading, getPosts, hasMore } = useUserPosts(userId, 9);
   const loaderRef = useInfiniteScroll(getPosts, loading, hasMore);
-  const { user } = useAuth();
 
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+
+  // PAGINATION STATE
+  const [followerPage, setFollowerPage] = useState(1);
+  const [followingPage, setFollowingPage] = useState(1);
+
+  const [hasMoreFollowers, setHasMoreFollowers] = useState(true);
+  const [hasMoreFollowing, setHasMoreFollowing] = useState(true);
+
+  const [loadingFollowers, setLoadingFollowers] = useState(false);
+  const [loadingFollowing, setLoadingFollowing] = useState(false);
+
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+
+  const [checkFollowing, setCheckFollowing] = useState([]);
+
+  // ========================
+  // FETCH FOLLOWERS (PAGINATED)
+  // ========================
+  const fetchFollowers = async () => {
+    if (loadingFollowers || !hasMoreFollowers) return;
+
+    try {
+      setLoadingFollowers(true);
+
+      const res = await getFollowersById(userId, followerPage, 10);
+      const newUsers = res?.data?.users || [];
+
+      setFollowers((prev) => [...prev, ...newUsers]);
+
+      if (newUsers.length < 10) {
+        setHasMoreFollowers(false);
+      } else {
+        setFollowerPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Fetch followers error:", error);
+    } finally {
+      setLoadingFollowers(false);
+    }
+  };
+
+  // ========================
+  // FETCH FOLLOWING (PAGINATED)
+  // ========================
+  const fetchFollowing = async () => {
+    if (loadingFollowing || !hasMoreFollowing) return;
+
+    try {
+      setLoadingFollowing(true);
+
+      const res = await getFollowingById(userId, followingPage, 10);
+      const newUsers = res?.data?.users || [];
+
+      setFollowing((prev) => [...prev, ...newUsers]);
+
+      if (newUsers.length < 10) {
+        setHasMoreFollowing(false);
+      } else {
+        setFollowingPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Fetch following error:", error);
+    } finally {
+      setLoadingFollowing(false);
+    }
+  };
+
+  // ========================
+  // LOAD PROFILE DATA
+  // ========================
   useEffect(() => {
+    setFollowers([]);
+    setFollowing([]);
+
+    setFollowerPage(1);
+    setFollowingPage(1);
+
+    setHasMoreFollowers(true);
+    setHasMoreFollowing(true);
+
     const loadProfileData = async () => {
-      const data = await fetchUserById(userId);
-      setUserData(data);
+      try {
+        const data = await fetchUserById(userId);
+
+        // set state untuk render
+        setUserData(data);
+
+        const totalFollowing = data?.totalFollowing ?? 0;
+        console.log("total", totalFollowing)
+        const response = await getFollowingById(
+          userId,
+          1,
+          totalFollowing || 10
+        );
+
+        console.log("ini following", response.data.users);
+        setCheckFollowing(response.data.users || []);
+      } catch (error) {
+        console.error("Load profile error:", error);
+      }
     };
-    loadProfileData();
+
+    if (userId) loadProfileData();
   }, [userId]);
 
-  return (
-    <div className="w-full min-h-screen bg-red-300 text-black ">
-      {/* ISI USER */}
-      <div className="max-w-2xl mx-auto md:bg-white md:-mb-2.5 md:pb-2.5 rounded-md md:px-8">
-        {/* Header */}
-        <div className="flex items-center p-1.5 relative border-b">
-          {/* arrow */}
-          <span className="absolute left-2 text-2xl font-bold">←</span>
+  // Saat modal followers dibuka
+  useEffect(() => {
+    if (showFollowers && followers.length === 0) {
+      fetchFollowers();
+    }
+  }, [showFollowers]);
 
-          {/* username header */}
-          <span className="mx-auto font-semibold text-base">
-            {user?.username || ""}
+  // Saat modal following dibuka
+  useEffect(() => {
+    if (showFollowing && following.length === 0) {
+      fetchFollowing();
+    }
+  }, [showFollowing]);
+
+  // ========================
+  // INFINITE SCROLL FOR MODAL
+  // ========================
+  const followersLoaderRef = useInfiniteScroll(
+    fetchFollowers,
+    loadingFollowers,
+    hasMoreFollowers
+  );
+
+  const followingLoaderRef = useInfiniteScroll(
+    fetchFollowing,
+    loadingFollowing,
+    hasMoreFollowing
+  );
+
+  return (
+    <div className="w-full min-h-screen bg-gray-100 text-black">
+      {/* PROFILE HEADER */}
+      <div className="max-w-2xl mx-auto bg-white rounded-md px-6 py-4 shadow-sm">
+        {/* HEADER */}
+        <div className="flex items-center justify-center mb-4 relative border-b pb-2">
+          <span className="absolute left-0 text-2xl font-bold cursor-pointer">
+            ←
+          </span>
+          <span className="font-semibold text-lg">
+            {userData?.username || ""}
           </span>
         </div>
 
-        {/* profile */}
-        <div>
-          {/* top part */}
-          <div className="py-3 flex justify-between items-center">
-            <img
-              src={
-                user?.profilePictureUrl &&
-                user.profilePictureUrl.length > 0
-                  ? user.profilePictureUrl
-                  : `https://ui-avatars.com/api/?name=${user?.username}`
-              }
-              alt=""
-              className="w-18 h-18 rounded-full bg-white"
-            />
+        {/* PROFILE INFO */}
+        <div className="flex gap-6 items-between">
+          <img
+            src={
+              userData?.profilePictureUrl
+                ? userData.profilePictureUrl
+                : `https://ui-avatars.com/api/?name=${userData?.username}`
+            }
+            alt="profile"
+            className="w-20 h-20 rounded-full object-cover bg-gray-500"
+          />
 
-            {/* kanan */}
-            <div className="flex flex-col mx-auto items-center justify-between">
-              {/* username */}
-              <span className="mx-auto my-2 font-semibold text-base">
-                {user?.username || ""}
-              </span>
+          <div className="flex-col flex items-center md:ml-27">
+            <p className="font-semibold text-lg mb-3">{userData?.username}</p>
 
-              <div className="flex gap-4 ">
-                <div className="flex flex-col">
-                  <span className="mx-auto">posts</span>
-                  <span className="mx-auto">{posts?.length}</span>
-                </div>
+            <div className="flex gap-6 text-center">
+              <div>
+                <p className="font-semibold">{posts?.length || 0}</p>
+                <span className="text-sm text-gray-500">Posts</span>
+              </div>
 
-                <div className="flex flex-col">
-                  <span className="mx-auto">followers</span>
-                  <span className="mx-auto">{userData?.totalFollowers}</span>
-                </div>
+              <div
+                onClick={() => setShowFollowers(true)}
+                className="cursor-pointer"
+              >
+                <p className="font-semibold">{userData?.totalFollowers}</p>
+                <span className="text-sm text-gray-500">Followers</span>
+              </div>
 
-                <div className="flex flex-col">
-                  <span className="mx-auto">following</span>
-                  <span className="mx-auto">{userData?.totalFollowing}</span>
-                </div>
+              <div
+                onClick={() => setShowFollowing(true)}
+                className="cursor-pointer"
+              >
+                <p className="font-semibold">{userData?.totalFollowing}</p>
+                <span className="text-sm text-gray-500">Following</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* bio */}
-          <div>
-            <div className="text-md w-1/2">{user?.bio || ""}</div>
+        {/* BIO & INFO */}
+        <div className="mt-4 space-y-1">
+          {userData?.bio && <p className="text-sm">{userData.bio}</p>}
 
-            {userData?.phoneNumber && (
-              <div className="text-sm w-1/2 mt-2 mb-2">
-                📞: {user.phoneNumber}
-              </div>
-            )}
+          {userData?.phoneNumber && (
+            <p className="text-sm">📞 {userData.phoneNumber}</p>
+          )}
 
-            {userData?.email && (
-              <div className="text-sm mt-2 mb-2">📧: {user.email}</div>
-            )}
+          {userData?.email && <p className="text-sm">📧 {userData.email}</p>}
 
-            {userData?.website && (
-              <div className="text-sm w-1/2 mt-2 mb-2">
-                🌐: {user.website}
-              </div>
-            )}
-          </div>
+          {userData?.website && (
+            <p className="text-sm">🌐 {userData.website}</p>
+          )}
+        </div>
 
-          {/* buttons */}
-          <div className="flex justify-around items-center">
-            <button className="bg-blue-400 py-1 px-6.5 rounded-xl">
+        {/* BUTTONS (tanpa follow logic dulu) */}
+        {currentUser?.id !== userId && (
+          <div className="flex justify-center gap-4 mt-5">
+            <button className="bg-blue-500 text-white px-6 py-1 rounded-lg">
               Follow
             </button>
-            <button className="bg-gray-300 py-1 px-4 rounded-xl">
+
+            <button className="bg-gray-300 px-6 py-1 rounded-lg">
               Message
             </button>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* post grid */}
-      <div className="bg-white border-t-0 ">
-        <PostGrid posts={posts} className="bg-white -m-4 mt-2 p-2 md:p-6" />
+      {/* POST GRID */}
+      <div className="max-w-5xl mx-auto mt-6 bg-white rounded-md p-4">
+        <PostGrid posts={posts} />
+        <div ref={loaderRef} className="h-10"></div>
       </div>
-      <div ref={loaderRef} className="h-10"></div>
+
+      {/* FOLLOWERS MODAL */}
+      <FollowModal
+        isOpen={showFollowers}
+        onClose={() => setShowFollowers(false)}
+        title="Followers"
+        users={followers}
+        following={checkFollowing}
+        loaderRef={followersLoaderRef}
+      />
+
+      {/* FOLLOWING MODAL */}
+      <FollowModal
+        isOpen={showFollowing}
+        onClose={() => setShowFollowing(false)}
+        title="Following"
+        users={following}
+        following={checkFollowing}
+        loaderRef={followingLoaderRef}
+      />
     </div>
   );
 };
