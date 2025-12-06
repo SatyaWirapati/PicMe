@@ -38,11 +38,16 @@ const ProfilePage = () => {
 
   const [checkFollowing, setCheckFollowing] = useState([]);
 
+  const [loadedFollowerPages, setLoadedFollowerPages] = useState(new Set());
+  const [loadedFollowingPages, setLoadedFollowingPages] = useState(new Set());
+
   // ========================
   // FETCH FOLLOWERS (PAGINATED)
   // ========================
   const fetchFollowers = async () => {
     if (loadingFollowers || !hasMoreFollowers) return;
+    if (loadedFollowerPages.has(followerPage)) return;
+    setLoadedFollowerPages((prev) => new Set(prev).add(followerPage));
 
     try {
       setLoadingFollowers(true);
@@ -50,7 +55,15 @@ const ProfilePage = () => {
       const res = await getFollowersById(userId, followerPage, 10);
       const newUsers = res?.data?.users || [];
 
-      setFollowers((prev) => [...prev, ...newUsers]);
+      setFollowers((prev) => {
+        const map = new Map();
+
+        [...prev, ...newUsers].forEach((user) => {
+          map.set(user.id, user); // id = key → impossible duplicate
+        });
+
+        return Array.from(map.values());
+      });
 
       if (newUsers.length < 10) {
         setHasMoreFollowers(false);
@@ -69,6 +82,8 @@ const ProfilePage = () => {
   // ========================
   const fetchFollowing = async () => {
     if (loadingFollowing || !hasMoreFollowing) return;
+    if (loadedFollowingPages.has(followingPage)) return;
+    setLoadedFollowingPages((prev) => new Set(prev).add(followingPage));  
 
     try {
       setLoadingFollowing(true);
@@ -76,7 +91,15 @@ const ProfilePage = () => {
       const res = await getFollowingById(userId, followingPage, 10);
       const newUsers = res?.data?.users || [];
 
-      setFollowing((prev) => [...prev, ...newUsers]);
+      setFollowing((prev) => {
+        const map = new Map();
+
+        [...prev, ...newUsers].forEach((user) => {
+          map.set(user.id, user);
+        });
+
+        return Array.from(map.values());
+      });
 
       if (newUsers.length < 10) {
         setHasMoreFollowing(false);
@@ -111,7 +134,7 @@ const ProfilePage = () => {
         setUserData(data);
 
         const totalFollowing = data?.totalFollowing ?? 0;
-        console.log("total", totalFollowing)
+        console.log("total", totalFollowing);
         const response = await getFollowingById(
           userId,
           1,
