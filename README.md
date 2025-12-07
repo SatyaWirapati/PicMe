@@ -1,16 +1,39 @@
-# React + Vite
+# PicMe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application inspired by platforms like Pinterest and Instagram, enabling users to share and explore photos in a community-driven gallery.
 
-Currently, two official plugins are available:
+## About
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+PicMe is a social-photo web app that lets users upload, browse, like, comment on, and share photos. It’s built to showcase full-stack / web-app development skills — covering everything from frontend design and user interactions to state management and responsive UI/UX.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Upload and share photos
+- Browse a dynamic photo feed
+- Like and comment on posts
+- Responsive UI compatible with desktop and mobile devices
+- (You can add more features here as your app develops — e.g. search, user profiles, tags, sharing, etc.)
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- JavaScript, HTML, CSS
+- (If you use a framework/library — e.g. React, Vue.js — list it here)
+- (If you have build tools, bundlers, CSS preprocessors, backend, database, etc. — list them here accordingly)
+
+## Getting Started
+
+These instructions will help you get a local copy of the project running for development and testing.
+
+### Prerequisites
+
+- Node.js (and npm or yarn) installed
+- (Any other prerequisites — e.g. environment variables, database setup, etc.)
+
+### Installation & Running Locally
+
+```bash
+git clone https://github.com/SatyaWirapati/PicMe.git
+cd PicMe
+npm install        # or `yarn install`
+npm run dev        # or the command you use to start the dev server
+```
