@@ -25,7 +25,7 @@ const PostModal = ({ post, onClose }) => {
   const [fillEdited, setFillEdited] = useState(post.caption);
   const { showNotification } = useNotification();
 
-  console.log("28",post);
+  console.log("28", post);
 
   const showNotif = (msg) => {
     showNotification(msg);
@@ -98,16 +98,13 @@ const PostModal = ({ post, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex justify-center  items-center z-100">
-      <div className=" flex w-full h-full justify-center items-stretch overflow-hidden md:h-[85vh]  md:max-w-5xl md:rounded-lg ">
+      <div className=" flex w-full h-full justify-center items-stretch overflow-hidden md:h-128  md:max-w-5xl md:rounded-lg ">
         {/*=== LEFT IMAGE (Desktop) ===*/}
         <div className="bg-amber-50 hidden w-1/2 justify-center items-center md:flex ">
           <img
             src={post.imageUrl}
-            onError={(e) =>
-              (e.target.src =
-                "https://picsum.photos/500")
-            }
-            className="object-fill w-full h-full aspect-square"
+            onError={(e) => (e.target.src = "https://picsum.photos/500")}
+            className="object-fill w-full aspect-square"
           />
         </div>
 
@@ -173,8 +170,7 @@ const PostModal = ({ post, onClose }) => {
             <img
               src={post.imageUrl}
               onError={(e) => {
-                e.target.src =
-                  "https://picsum.photos/500";
+                e.target.src = "https://picsum.photos/500";
               }}
               className="absolute inset-0 w-full h-full object-fill"
             />
