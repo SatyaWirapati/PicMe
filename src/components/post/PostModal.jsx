@@ -105,7 +105,7 @@ const PostModal = ({ post, onClose }) => {
             src={post.imageUrl}
             onError={(e) =>
               (e.target.src =
-                "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500")
+                "https://picsum.photos/500")
             }
             className="object-fill w-full h-full aspect-square"
           />
@@ -174,7 +174,7 @@ const PostModal = ({ post, onClose }) => {
               src={post.imageUrl}
               onError={(e) => {
                 e.target.src =
-                  "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500";
+                  "https://picsum.photos/500";
               }}
               className="absolute inset-0 w-full h-full object-fill"
             />

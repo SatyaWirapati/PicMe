@@ -83,7 +83,7 @@ const ProfilePage = () => {
   const fetchFollowing = async () => {
     if (loadingFollowing || !hasMoreFollowing) return;
     if (loadedFollowingPages.has(followingPage)) return;
-    setLoadedFollowingPages((prev) => new Set(prev).add(followingPage));  
+    setLoadedFollowingPages((prev) => new Set(prev).add(followingPage));
 
     try {
       setLoadingFollowing(true);
@@ -201,6 +201,9 @@ const ProfilePage = () => {
               userData?.profilePictureUrl
                 ? userData.profilePictureUrl
                 : `https://ui-avatars.com/api/?name=${userData?.username}`
+            }
+            onError={(e) =>
+              (e.target.src = `https://ui-avatars.com/api/?name=${userData?.username}`)
             }
             alt="profile"
             className="w-20 h-20 rounded-full object-cover bg-gray-500"

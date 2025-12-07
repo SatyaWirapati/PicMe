@@ -124,8 +124,14 @@ export default function StoriesPage() {
                     className="flex items-center gap-2 bg-gray-100 p-2 rounded"
                   >
                     <img
-                      src={viewer?.user?.profilePictureUrl || DEFAULT_IMAGE}
-                      onError={(e) => (e.target.src = DEFAULT_IMAGE)}
+                      src={
+                        viewer.user?.profilePictureUrl
+                          ? viewer.user.profilePictureUrl
+                          : `https://ui-avatars.com/api/?name=${viewer.user?.username}`
+                      }
+                      onError={(e) =>
+                        (e.target.src = `https://ui-avatars.com/api/?name=${viewer.user?.username}`)
+                      }
                       className="w-8 h-8 rounded-full object-cover"
                     />
 

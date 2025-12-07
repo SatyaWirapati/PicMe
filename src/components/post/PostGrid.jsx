@@ -22,7 +22,7 @@ const PostGrid = ({ posts , className=""}) => {
                                 src={p.imageUrl}
                                 onError={(e) => {
                                     e.target.src =
-                                        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=500";
+                                        "https://picsum.photos/500";
                                 }}
                                 className="w-full h-full object-fill  rounded-md"
                             />
