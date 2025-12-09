@@ -22,13 +22,14 @@ function AppRouter() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/explore" element={<ExplorePage />} />
+
             <Route path="/add" element={<AddPage />} />
             <Route path="/stories" element={<StoriesPage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
-            <Route path="/editProfile" element={<EditProfilePage/>}/>
+            <Route path="/editProfile" element={<EditProfilePage />} />
           </Route>
         </Route>
+        <Route path="/explore" element={<ExplorePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
