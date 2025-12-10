@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
+import FollowButton from "./FollowButton";
 
 const FollowModal = ({
   isOpen,
@@ -11,10 +13,15 @@ const FollowModal = ({
 }) => {
   if (!isOpen) return null;
 
+  const [localFollowing, setLocalFollowing] = useState([]);
+
+  useEffect(() => {
+    setLocalFollowing(following.map((f) => f.id));
+  }, [following, isOpen]);
+
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex justify-center items-center">
       <div className="bg-white w-full max-w-md h-[500px] rounded-xl overflow-hidden">
-        {/* HEADER */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="font-semibold text-lg">{title}</h2>
           <button onClick={onClose}>
@@ -22,25 +29,21 @@ const FollowModal = ({
           </button>
         </div>
 
-        {/* LIST USERS */}
         <div className="p-3 space-y-3 overflow-y-auto h-[430px]">
           {users.length === 0 && (
             <p className="text-center text-gray-400">No users found</p>
           )}
 
           {users.map((u) => {
-            // ✅ Cek apakah user ini ada di following kita
-            const isFollowed = following.some((f) => f.id === u.id);
+            const isFollowed = localFollowing.includes(u.id);
 
             return (
               <div key={u.id} className="flex justify-between items-center">
-                {/* LEFT */}
                 <div className="flex items-center gap-3">
                   <img
                     src={
-                      u.profilePictureUrl
-                        ? u.profilePictureUrl
-                        : `https://ui-avatars.com/api/?name=${u.username}`
+                      u.profilePictureUrl ||
+                      `https://ui-avatars.com/api/?name=${u.username}`
                     }
                     onError={(e) =>
                       (e.target.src = `https://ui-avatars.com/api/?name=${u.username}`)
@@ -48,27 +51,26 @@ const FollowModal = ({
                     className="w-10 h-10 rounded-full object-cover"
                   />
 
-                  <Link to={`/profile/${u.id}`} onClick={() => {
-                    onClose()
-                  }}>
+                  <Link to={`/profile/${u.id}`} onClick={onClose}>
                     <p className="font-medium">{u.username}</p>
                   </Link>
                 </div>
 
-                {/* RIGHT */}
-                {isFollowed ? (
-                  <button className="text-sm bg-gray-300 px-4 py-1 rounded-lg">
-                    Following
-                  </button>
-                ) : (
-                  <button className="text-sm bg-blue-500 text-white px-4 py-1 rounded-lg">
-                    Follow
-                  </button>
-                )}
+                <FollowButton
+                  isFollowed={isFollowed}
+                  userId={u.id}
+                  onChanged={(newState) => {
+                    setLocalFollowing((prev) =>
+                      newState
+                        ? [...prev, u.id] // FOLLOW
+                        : prev.filter((id) => id !== u.id) // UNFOLLOW
+                    );
+                  }}
+                />
               </div>
             );
           })}
-          {/* Infinite Scroll Trigger */}
+
           <div ref={loaderRef} className="h-5"></div>
         </div>
       </div>

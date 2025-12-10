@@ -14,4 +14,13 @@ const getFollowersById = async (userId, page = 1, size = 10) => {
     return response.data;
 }
 
-export {getFollowersById, getFollowingById}
+const followUser = async (userId) => {
+    const response = await axiosInstance.post(`/follow`,{userIdFollow:userId} );
+    return response.data;
+}
+
+const unfollowUser = async (userId) => {
+    const response = await axiosInstance.delete(`/unfollow/${userId}`);
+    return response.data;
+}
+export {getFollowersById, getFollowingById, followUser, unfollowUser}
