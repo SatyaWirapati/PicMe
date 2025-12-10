@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { registerUser } from "../api/authenticationApi";
+import { ArrowLeft } from "lucide-react"
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { login, user} = useAuth();
+  const { login, user } = useAuth();
 
   const [step, setStep] = useState(1); // <-- STEP 1 or STEP 2
 
@@ -31,7 +32,12 @@ const RegisterPage = () => {
       type: "text",
       required: true,
     },
-    { name: "password", label: "Password (must include letter and number", type: "password", required: true },
+    {
+      name: "password",
+      label: "Password (must include letter and number",
+      type: "password",
+      required: true,
+    },
     {
       name: "passwordRepeat",
       label: "Repeat Password",
@@ -79,9 +85,9 @@ const RegisterPage = () => {
 
     try {
       setIsLoading(true);
-      console.log(formData);  
+      console.log(formData);
       const response = await registerUser(formData);
-      
+
       navigate("/login");
     } catch (err) {
       const message =
@@ -111,11 +117,11 @@ const RegisterPage = () => {
           )}
 
           {/* STEP 1 */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-start">
             {step === 1 &&
               step1Fields.map((field) => (
                 <div key={field.name} className="w-full">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1 h-8">
                     {field.label}
                   </label>
                   <input
@@ -165,18 +171,24 @@ const RegisterPage = () => {
           )}
 
           {step === 2 && (
-            <button
-              type="submit"
-              className={`bg-blue-500 text-white rounded-md py-2 px-6 text-lg mt-4 transition duration-300 shadow-md 
+            <div className="flex flex-row items-center  w-full relative">
+              <button className="absolute left-0"
+              onClick={()=> setStep(1)}>
+                <ArrowLeft size={20}/>
+              </button>
+              <button
+                type="submit"
+                className={`bg-blue-500 text-white rounded-md py-2 px-6 text-lg mt-4 mx-auto transition duration-300 shadow-md 
               ${
                 isLoading
                   ? "opacity-60 cursor-not-allowed"
                   : "hover:bg-blue-600 hover:scale-105 hover:shadow-lg"
               }`}
-              disabled={isLoading}
-            >
-              {isLoading ? "Signing up..." : "Sign Up"}
-            </button>
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing up..." : "Sign Up"}
+              </button>
+            </div>
           )}
         </form>
 

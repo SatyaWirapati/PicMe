@@ -29,7 +29,6 @@ function AppRouter() {
             <Route path="/editProfile" element={<EditProfilePage />} />
           </Route>
         </Route>
-        <Route path="/explore" element={<ExplorePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
