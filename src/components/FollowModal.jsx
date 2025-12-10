@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const FollowModal = ({
   isOpen,
@@ -41,13 +42,17 @@ const FollowModal = ({
                         ? u.profilePictureUrl
                         : `https://ui-avatars.com/api/?name=${u.username}`
                     }
+                    onError={(e) =>
+                      (e.target.src = `https://ui-avatars.com/api/?name=${u.username}`)
+                    }
                     className="w-10 h-10 rounded-full object-cover"
                   />
 
-                  <div>
+                  <Link to={`/profile/${u.id}`} onClick={() => {
+                    onClose()
+                  }}>
                     <p className="font-medium">{u.username}</p>
-                    <p className="text-sm text-gray-400">{u.email}</p>
-                  </div>
+                  </Link>
                 </div>
 
                 {/* RIGHT */}

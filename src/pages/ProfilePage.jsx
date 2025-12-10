@@ -77,6 +77,20 @@ const ProfilePage = () => {
     }
   };
 
+  // reseting follow states
+  const resetFollowerModal = () => {
+    setFollowers([]);
+    setFollowerPage(1);
+    setHasMoreFollowers(true);
+    setLoadedFollowerPages(new Set());
+  };
+
+  const resetFollowingModal = () => {
+    setFollowing([]);
+    setFollowingPage(1);
+    setHasMoreFollowing(true);
+    setLoadedFollowingPages(new Set());
+  };
   // ========================
   // FETCH FOLLOWING (PAGINATED)
   // ========================
@@ -156,14 +170,14 @@ const ProfilePage = () => {
     if (showFollowers && followers.length === 0) {
       fetchFollowers();
     }
-  }, [showFollowers]);
+  }, [showFollowers, userId]);
 
   // Saat modal following dibuka
   useEffect(() => {
     if (showFollowing && following.length === 0) {
       fetchFollowing();
     }
-  }, [showFollowing]);
+  }, [showFollowing, userId]);
 
   // ========================
   // INFINITE SCROLL FOR MODAL
@@ -275,7 +289,10 @@ const ProfilePage = () => {
       {/* FOLLOWERS MODAL */}
       <FollowModal
         isOpen={showFollowers}
-        onClose={() => setShowFollowers(false)}
+        onClose={() => {
+          setShowFollowers(false);
+          resetFollowerModal()
+        }}
         title="Followers"
         users={followers}
         following={checkFollowing}
@@ -285,7 +302,10 @@ const ProfilePage = () => {
       {/* FOLLOWING MODAL */}
       <FollowModal
         isOpen={showFollowing}
-        onClose={() => setShowFollowing(false)}
+        onClose={() => {
+          setShowFollowing(false);
+          resetFollowingModal()
+        }}
         title="Following"
         users={following}
         following={checkFollowing}

@@ -297,7 +297,7 @@ const PostModal = ({ post, onClose }) => {
             <input
               type="text"
               placeholder="Add a comment..."
-              className="w-full bg-white h-full border-t rounded-sm px-2 py-2
+              className="w-full bg-white h-full border-t rounded-br-md px-2 py-2
                                          focus:outline-none
                                         focus:ring-0
                                         focus:border-transparent"
