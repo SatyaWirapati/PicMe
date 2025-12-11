@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authenticationApi";
 import { useAuth } from "../context/AuthContext";
-import { useNotification } from "../context/NotificationContext"; 
+import { useNotification } from "../context/NotificationContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const LoginPage = () => {
       const responese = await loginUser(form.email, form.password);
       console.log("Login Success:", responese);
       login(responese.user);
-      showNotification("Login In")
+      showNotification("Login In");
       navigate("/explore");
     } catch (err) {
       const errorMessage =
@@ -102,6 +102,13 @@ const LoginPage = () => {
           </Link>
         </div>
       </div>
+      <Link
+        to="/explore"
+        className="bg-blue-500 text-white p-2 rounded-md mt-3 text-center transition duration-300
+         hover:bg-blue-600 hover:scale-105 hover:shadow-lg"
+      >
+        {"Or continue without login =>"}
+      </Link>
     </div>
   );
 };
