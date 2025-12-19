@@ -49,7 +49,7 @@ const LoginPage = () => {
         <span className="px-3 text-xl">Login</span>
         <form
           action=""
-          className="flex flex-col gap-4.5 items-center px-3 mt-3 "
+          className="flex flex-col gap-4 items-center px-3 mt-3 "
           onSubmit={handleSubmit}
         >
           {error && (
@@ -57,22 +57,38 @@ const LoginPage = () => {
               {error}!
             </div>
           )}
-          <input
-            onChange={handleChange}
-            type="text"
-            name="email"
-            value={form.email}
-            placeholder="Email"
-            className="border w-full bg-white rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            className="border w-full bg-white rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
-          />
+          <div>
+            <label for="email" className=" text-left w-full">
+              (miftahfarhan2@gmail.com)
+            </label>
+            <input
+              onChange={handleChange}
+              id="email"
+              type="text"
+              name="email"
+              value={form.email}
+              placeholder="Email"
+              className="border w-full mt-1 bg-white rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black"
+            />
+          </div>
+
+          <div className="w-full">
+            <label
+              for="password"
+              className="w-full text-left pb-2"
+            >
+              (qwerty123)
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className="border w-full bg-white rounded-md p-2 mt-1 focus:outline-none focus:ring-1 focus:ring-black"
+            />
+          </div>
 
           <button
             type="submit"
